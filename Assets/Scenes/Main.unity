@@ -147,7 +147,7 @@ Transform:
   m_GameObject: {fileID: 55243206}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.09, y: 1.63, z: -1.62}
+  m_LocalPosition: {x: 0.39, y: 0.9, z: -1.78}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -929,11 +929,14 @@ MonoBehaviour:
   moveSpeed: 50
   dir: {x: 0, y: 0, z: 0}
   controller: {fileID: 788541436}
-  groundYOffset: 0.6
+  groundYOffset: 0.2
   groundMask:
     serializedVersion: 2
     m_Bits: 8
-  gravity: -9.81
+  gravity: -70
+  velocity: {x: 0, y: 0, z: 0}
+  jumpForce: 8
+  anim: {fileID: 0}
 --- !u!114 &788541438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -946,42 +949,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e24ac2f0df1e3245a62e03a79a73e80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xAxis:
-    Value: 0
-    m_SpeedMode: 0
-    m_MaxSpeed: 300
-    m_AccelTime: 0
-    m_DecelTime: 0
-    m_InputAxisName: Mouse X
-    m_InputAxisValue: 0
-    m_InvertInput: 0
-    m_MinValue: -180
-    m_MaxValue: 180
-    m_Wrap: 1
-    m_Recentering:
-      m_enabled: 0
-      m_WaitTime: 0
-      m_RecenteringTime: 0
-      m_LegacyHeadingDefinition: 0
-      m_LegacyVelocityFilterStrength: 0
-  yAxis:
-    Value: 0
-    m_SpeedMode: 0
-    m_MaxSpeed: 300
-    m_AccelTime: 0
-    m_DecelTime: 0
-    m_InputAxisName: Mouse Y
-    m_InputAxisValue: 0
-    m_InvertInput: 1
-    m_MinValue: -60
-    m_MaxValue: 60
-    m_Wrap: 0
-    m_Recentering:
-      m_enabled: 0
-      m_WaitTime: 0
-      m_RecenteringTime: 0
-      m_LegacyHeadingDefinition: 0
-      m_LegacyVelocityFilterStrength: 0
+  mouseSense: 1
   camFollowPos: {fileID: 55243207}
 --- !u!1 &1095520158
 GameObject:
@@ -1184,7 +1152,7 @@ Transform:
   m_GameObject: {fileID: 1230616670}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.8000001, y: 134.59999, z: -34.4}
+  m_LocalPosition: {x: 7.7999997, y: 120, z: -37.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
