@@ -17,7 +17,11 @@ public class IdleState : MovementBaseState
             else movement.SwitchState(movement.Walk);
         }
 
-        if (Input.GetKeyDown(KeyCode.C)) movement.SwitchState(movement.Crouch);
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            aim.animator.SetBool("Aiming", true);
+            movement.SwitchState(movement.Crouch);
+        }
         
 
         if (Input.GetKey(KeyCode.Space) && movement.IsGrounded())
@@ -25,9 +29,11 @@ public class IdleState : MovementBaseState
             movement.SwitchState(movement.Jump);
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0)) aim.animator.SetBool("Aiming", true);
+        if (Input.GetKeyDown(KeyCode.Mouse1))
         {
-            
+            aim.isAiming = !aim.isAiming;
+            aim.animator.SetBool("Aiming", aim.isAiming);
         }
+        
     }
 }

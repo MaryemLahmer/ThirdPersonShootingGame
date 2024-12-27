@@ -18,6 +18,11 @@ public class RunState : MovementBaseState
         if (movement.vInput < 0) movement.currentMoveSpeed = movement.runBackSpeed;
         else movement.currentMoveSpeed = movement.runSpeed; 
         
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            aim.isAiming = !aim.isAiming;
+            aim.animator.SetBool("Aiming", aim.isAiming);
+        }
     }
     
     

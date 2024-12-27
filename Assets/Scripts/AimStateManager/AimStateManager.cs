@@ -8,10 +8,12 @@ public class AimStateManager : MonoBehaviour
     float xAxis, yAxis;
     [SerializeField] Transform camFollowPos;
     [HideInInspector] public Animator animator;
+    public bool isAiming;
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
         SwitchState(Hip);
+        isAiming = false;
         
     }
 

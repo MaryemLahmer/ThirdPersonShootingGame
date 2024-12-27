@@ -29,12 +29,14 @@ public class MovementStateManager : MonoBehaviour
     public RunState Run = new RunState();
     public JumpState Jump = new JumpState();
 
+    public bool isCrouching;
     [HideInInspector] public Animator anim;
     [SerializeField] AimStateManager aim;
     void Start()
     {
         anim = GetComponentInChildren<Animator>();
         SwitchState(Idle);
+        isCrouching = false;
     }
 
     void Update()

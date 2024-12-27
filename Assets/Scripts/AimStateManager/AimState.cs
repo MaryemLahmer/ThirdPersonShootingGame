@@ -12,7 +12,7 @@ public class AimState : AimBaseState
 
     public override void UpdateState(AimStateManager aim)
     {
-        if(Input.GetKeyUp(KeyCode.Mouse1)) aim.SwitchState(aim.Hip);
+        if(Input.GetKeyUp(KeyCode.Mouse0)) aim.SwitchState(aim.Hip);
 
         
     }
