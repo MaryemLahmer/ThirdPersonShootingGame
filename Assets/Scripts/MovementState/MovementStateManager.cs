@@ -5,16 +5,20 @@ using UnityEngine;
 
 public class MovementStateManager : MonoBehaviour
 {
-    public float moveSpeed = 50f;
+    public float currentMoveSpeed = 50f;
+    public float walkSpeed = 3f, walkBackSpeed = 2f;
+    public float runSpeed = 7f, runBackSpeed = 5f;
+    public float crouchSpeed = 2f, crouchBackSpeed = 1f;
+
     [HideInInspector] public Vector3 dir;
-    float hInput, vInput;
+    [HideInInspector] public float hInput, vInput;
     [SerializeField] CharacterController controller;
 
     [SerializeField] private float groundYOffset;
     [SerializeField] LayerMask groundMask;
     private Vector3 shperePosition;
 
-    [SerializeField] public float gravity = -19.81f;
+    [SerializeField] public float gravity;
     public Vector3 velocity;
     [SerializeField] public float jumpForce = 5f;
 
@@ -53,7 +57,7 @@ public class MovementStateManager : MonoBehaviour
         hInput = Input.GetAxis("Horizontal");
         vInput = Input.GetAxis("Vertical");
         dir = (transform.forward * vInput + transform.right * hInput);
-        controller.Move(dir.normalized * moveSpeed * Time.deltaTime);
+        controller.Move(dir.normalized * currentMoveSpeed * Time.deltaTime);
     }
 
     public bool IsGrounded()

@@ -926,16 +926,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2201b6198081c945a3ef7042ab71219, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 50
+  currentMoveSpeed: 50
+  walkSpeed: 40
+  walkBackSpeed: 25
+  runSpeed: 55
+  runBackSpeed: 35
+  crouchSpeed: 20
+  crouchBackSpeed: 15
   dir: {x: 0, y: 0, z: 0}
+  hInput: 0
+  vInput: 0
   controller: {fileID: 788541436}
   groundYOffset: 0.2
   groundMask:
     serializedVersion: 2
     m_Bits: 8
-  gravity: -70
+  gravity: -90
   velocity: {x: 0, y: 0, z: 0}
-  jumpForce: 8
+  jumpForce: 6
   anim: {fileID: 0}
 --- !u!114 &788541438
 MonoBehaviour:
