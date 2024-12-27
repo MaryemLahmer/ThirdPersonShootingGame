@@ -945,6 +945,7 @@ MonoBehaviour:
   velocity: {x: 0, y: 0, z: 0}
   jumpForce: 6
   anim: {fileID: 0}
+  aim: {fileID: 788541438}
 --- !u!114 &788541438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -959,6 +960,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mouseSense: 1
   camFollowPos: {fileID: 55243207}
+  animator: {fileID: 0}
 --- !u!1 &1095520158
 GameObject:
   m_ObjectHideFlags: 3

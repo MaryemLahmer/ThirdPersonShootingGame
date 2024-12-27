@@ -9,7 +9,7 @@ public class CrouchState : MovementBaseState
         movement.anim.SetBool("Crouching", true);
     }
 
-    public override void UpdateState(MovementStateManager movement)
+    public override void UpdateState(MovementStateManager movement, AimStateManager aim )
     {
         if (Input.GetKey(KeyCode.LeftShift)) ExitState(movement, movement.Run);
       

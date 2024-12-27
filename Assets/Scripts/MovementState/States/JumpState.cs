@@ -22,7 +22,7 @@ public class JumpState : MovementBaseState
     }
 
 
-    public override void UpdateState(MovementStateManager movement)
+    public override void UpdateState(MovementStateManager movement, AimStateManager aim)
     {
         if (movement.velocity.y <= 0 && movement.IsGrounded())
         {

@@ -30,7 +30,7 @@ public class MovementStateManager : MonoBehaviour
     public JumpState Jump = new JumpState();
 
     [HideInInspector] public Animator anim;
-
+    [SerializeField] AimStateManager aim;
     void Start()
     {
         anim = GetComponentInChildren<Animator>();
@@ -43,7 +43,7 @@ public class MovementStateManager : MonoBehaviour
         Gravity();
         anim.SetFloat("hInput", hInput);
         anim.SetFloat("vInput", vInput);
-        currentState.UpdateState(this);
+        currentState.UpdateState(this, aim);
     }
 
     public void SwitchState(MovementBaseState newState)

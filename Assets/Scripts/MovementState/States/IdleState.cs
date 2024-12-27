@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class IdleState : MovementBaseState
 {
+    
     public override void EnterState(MovementStateManager movement)
     {
     }
 
-    public override void UpdateState(MovementStateManager movement)
+    public override void UpdateState(MovementStateManager movement, AimStateManager aim)
     {
         if (movement.dir.magnitude > 0.1f)
         {
@@ -22,6 +23,11 @@ public class IdleState : MovementBaseState
         if (Input.GetKey(KeyCode.Space) && movement.IsGrounded())
         {
             movement.SwitchState(movement.Jump);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0)) aim.animator.SetBool("Aiming", true);
+        {
+            
         }
     }
 }
