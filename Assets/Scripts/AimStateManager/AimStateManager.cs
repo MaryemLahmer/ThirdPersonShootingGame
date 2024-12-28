@@ -18,11 +18,15 @@ public class AimStateManager : MonoBehaviour
     public float fovSmoothSpeed = 10f;
     public bool isAiming;
 
+    [SerializeField] private Transform aimPos;
+    [SerializeField] private float aimSmoothSpeed = 20f;
+    [SerializeField] LayerMask aimMask;
+    [SerializeField] Camera mainCamera;
 
     void Start()
     {
         hipFov = vcam.m_Lens.FieldOfView;
-        animator = GetComponentInChildren<Animator>();
+        animator = GetComponent<Animator>();
         SwitchState(Hip);
         isAiming = false;
         animator.SetLayerWeight(1, 0);
@@ -35,10 +39,14 @@ public class AimStateManager : MonoBehaviour
         yAxis = Mathf.Clamp(yAxis, -80, 80);
         currentState.UpdateState(this);
         vcam.m_Lens.FieldOfView = Mathf.Lerp(vcam.m_Lens.FieldOfView, currentFov, fovSmoothSpeed * Time.deltaTime);
-
         currentFov = isAiming ? adsFov : hipFov;
-
         
+        Vector2 screenCenter  = new Vector2(Screen.width / 2, Screen.height / 2);
+        Ray ray = mainCamera.ScreenPointToRay(screenCenter);
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, aimMask))
+            aimPos.position = Vector3.Lerp(aimPos.position, hit.point, aimSmoothSpeed * Time.deltaTime);
+
+
     }
 
     private void LateUpdate()

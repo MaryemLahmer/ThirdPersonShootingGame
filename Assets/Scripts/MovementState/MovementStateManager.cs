@@ -34,7 +34,7 @@ public class MovementStateManager : MonoBehaviour
     [SerializeField] AimStateManager aim;
     void Start()
     {
-        anim = GetComponentInChildren<Animator>();
+        anim = GetComponent<Animator>();
         SwitchState(Idle);
         isCrouching = false;
     }
