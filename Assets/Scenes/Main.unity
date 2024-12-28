@@ -147,7 +147,7 @@ Transform:
   m_GameObject: {fileID: 55243206}
   serializedVersion: 2
   m_LocalRotation: {x: -0.00039211998, y: -0.50536144, z: -0.0015268134, w: 0.86290634}
-  m_LocalPosition: {x: 2.37, y: 1.09, z: -0.43}
+  m_LocalPosition: {x: 1.98, y: 1.46, z: -0.73}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -552,7 +552,7 @@ Transform:
   m_GameObject: {fileID: 650490826}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.97, y: 24, z: -1.96}
+  m_LocalPosition: {x: 1.97, y: 24, z: -3.79}
   m_LocalScale: {x: 6, y: 40, z: 2.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -962,6 +962,11 @@ MonoBehaviour:
   mouseSense: 3
   camFollowPos: {fileID: 55243207}
   animator: {fileID: 0}
+  vcam: {fileID: 1254814973}
+  adsFov: 40
+  hipFov: 0
+  currentFov: 0
+  fovSmoothSpeed: 10
   isAiming: 0
 --- !u!1 &1095520158
 GameObject:
@@ -1164,7 +1169,7 @@ Transform:
   m_GameObject: {fileID: 1230616670}
   serializedVersion: 2
   m_LocalRotation: {x: -0.00039211998, y: -0.50536144, z: -0.0015268134, w: 0.86290634}
-  m_LocalPosition: {x: 49.145527, y: 123.79556, z: -9.578093}
+  m_LocalPosition: {x: 41.345528, y: 131.19556, z: -15.578093}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1204,7 +1209,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60.000004
+  field of view: 60
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -1281,7 +1286,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1254814971}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -4.3655746e-11, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1310,7 +1315,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 55243207}
   m_Follow: {fileID: 55243207}
   m_Lens:
-    FieldOfView: 60.000004
+    FieldOfView: 60
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000

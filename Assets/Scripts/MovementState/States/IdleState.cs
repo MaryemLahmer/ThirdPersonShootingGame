@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class IdleState : MovementBaseState
 {
-    
     public override void EnterState(MovementStateManager movement)
     {
     }
@@ -21,20 +20,13 @@ public class IdleState : MovementBaseState
         {
             movement.SwitchState(movement.Crouch);
         }
-        
+
 
         if (Input.GetKey(KeyCode.Space) && movement.IsGrounded())
         {
             movement.SwitchState(movement.Jump);
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            aim.isAiming = !aim.isAiming;
-            aim.animator.SetBool("Aiming", aim.isAiming);
-            aim.animator.SetLayerWeight(1, aim.isAiming ? 1 : 0);
-
-        }
-        
+       
     }
 }

@@ -29,12 +29,13 @@ public class CrouchState : MovementBaseState
             movement.currentMoveSpeed = movement.isCrouching ? movement.crouchSpeed : movement.walkSpeed;
 
         movement.anim.SetFloat("Speed", Mathf.Abs(movement.vInput * movement.currentMoveSpeed));
-
+    /*
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             aim.isAiming = !aim.isAiming;
             aim.animator.SetBool("Aiming", aim.isAiming);
         }
+        */
     }
 
     void ExitState(MovementStateManager movement, MovementBaseState state)

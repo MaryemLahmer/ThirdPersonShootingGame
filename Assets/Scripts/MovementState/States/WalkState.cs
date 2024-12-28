@@ -20,14 +20,7 @@ public class WalkState : MovementBaseState
         if (movement.vInput < 0) movement.currentMoveSpeed = movement.walkBackSpeed;
         else movement.currentMoveSpeed = movement.walkSpeed; 
         
-        if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            aim.isAiming = !aim.isAiming;
-            aim.animator.SetBool("Aiming", aim.isAiming);
-            aim.animator.SetLayerWeight(1, aim.isAiming ? 1 : 0);
-
-        }
-
+       
 
     }
 

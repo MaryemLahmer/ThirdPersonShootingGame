@@ -46,6 +46,13 @@ public class MovementStateManager : MonoBehaviour
         anim.SetFloat("hInput", hInput);
         anim.SetFloat("vInput", vInput);
         currentState.UpdateState(this, aim);
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            aim.isAiming = !aim.isAiming;
+            aim.animator.SetBool("Aiming", aim.isAiming);
+            aim.animator.SetLayerWeight(1, aim.isAiming ? 1 : 0);
+
+        }
     }
 
     public void SwitchState(MovementBaseState newState)

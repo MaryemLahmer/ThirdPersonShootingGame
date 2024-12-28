@@ -17,7 +17,7 @@ public class RunState : MovementBaseState
         // else if (movement.dir.magnitude < 0.1f) ExitState(movement, movement.Idle);
         if (movement.vInput < 0) movement.currentMoveSpeed = movement.runBackSpeed;
         else movement.currentMoveSpeed = movement.runSpeed; 
-        
+        /*
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             aim.isAiming = !aim.isAiming;
@@ -25,6 +25,7 @@ public class RunState : MovementBaseState
             aim.animator.SetLayerWeight(1, aim.isAiming ? 1 : 0);
 
         }
+        */
     }
     
     
