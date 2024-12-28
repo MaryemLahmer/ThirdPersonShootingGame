@@ -7,17 +7,15 @@ public class JumpState : MovementBaseState
     public override void EnterState(MovementStateManager movement)
     {
         movement.StartCoroutine(HandleJumpTransition(movement));
+       
+
     }
 
     private IEnumerator HandleJumpTransition(MovementStateManager movement)
     {
         movement.anim.SetBool("Jumping", true);
-
-        // Small delay to account for animation transition
-        yield return new WaitForSeconds(0.3f);
-
+        yield return new WaitForSeconds(0.4f);
         movement.velocity.y = Mathf.Sqrt(movement.jumpForce * -8f * movement.gravity);
-        yield return new WaitForSeconds(0.3f);
 
     }
 

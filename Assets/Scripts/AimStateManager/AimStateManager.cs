@@ -14,6 +14,7 @@ public class AimStateManager : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         SwitchState(Hip);
         isAiming = false;
+        animator.SetLayerWeight(1,0);
         
     }
 

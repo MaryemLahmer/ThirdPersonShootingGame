@@ -19,7 +19,6 @@ public class IdleState : MovementBaseState
 
         if (Input.GetKeyDown(KeyCode.C))
         {
-          //  aim.animator.SetBool("Aiming", true);
             movement.SwitchState(movement.Crouch);
         }
         
@@ -33,6 +32,8 @@ public class IdleState : MovementBaseState
         {
             aim.isAiming = !aim.isAiming;
             aim.animator.SetBool("Aiming", aim.isAiming);
+            aim.animator.SetLayerWeight(1, aim.isAiming ? 1 : 0);
+
         }
         
     }
