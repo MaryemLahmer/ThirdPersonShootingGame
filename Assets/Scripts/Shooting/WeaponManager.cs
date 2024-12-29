@@ -15,7 +15,7 @@ public class WeaponManager : MonoBehaviour
     [SerializeField] float bulletVelocity;
     [SerializeField] private int bulletPerShot;
     private AimStateManager aim;
-
+    private WeaponAmmo ammo;
     [SerializeField] private AudioClip gunShot;
     AudioSource audioSource;
     
@@ -23,19 +23,21 @@ public class WeaponManager : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
         aim = GetComponentInParent<AimStateManager>();
+        ammo = GetComponent<WeaponAmmo>();
         fireRateTimer = fireRate;
     }
 
     void Update()
     {
-        if (shouldFire()) Fire(); 
-        
+        if (shouldFire() && aim.isAiming) Fire();
+
     }
 
     bool shouldFire()
     {
         fireRateTimer += Time.deltaTime;
         if (fireRateTimer < fireRate) return false;
+        if(ammo.currentAmmo == 0) return false;
         if (semiAuto && Input.GetKeyDown(KeyCode.Mouse0)) return true;
         if (!semiAuto && Input.GetKey(KeyCode.Mouse0)) return true;
         return false;
@@ -47,6 +49,7 @@ public class WeaponManager : MonoBehaviour
         fireRateTimer = 0;
         barrelPos.LookAt(aim.aimPos);
         audioSource.PlayOneShot(gunShot);
+        ammo.currentAmmo--;
         for (int i = 0; i < bulletPerShot; i++)
         {
             GameObject bulletInstance = Instantiate(bullet, barrelPos.position, barrelPos.rotation);
