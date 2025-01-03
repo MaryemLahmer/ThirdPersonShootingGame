@@ -4,7 +4,7 @@ using Cinemachine;
 
 public class AimStateManager : MonoBehaviour
 {
-    private AimBaseState currentState;
+    public AimBaseState currentState;
     public HipFireState Hip = new HipFireState();
     public AimState Aim = new AimState();
     [SerializeField] private float mouseSense = 1;
@@ -22,10 +22,22 @@ public class AimStateManager : MonoBehaviour
     [HideInInspector] public Vector3 actualAimPos;
     [SerializeField] private float aimSmoothSpeed = 20f;
     [SerializeField] LayerMask aimMask;
+
+    private float xFollowPos;
+    float yFollowPos, ogYPos;
+    [SerializeField] private float crouchCamHeight = 0.6f;
+    [SerializeField] private float shoulderSwapSpeed = 10f;
+    private MovementStateManager moving;
+
+
     [SerializeField] Camera mainCamera;
 
     void Start()
     {
+        moving = GetComponent<MovementStateManager>();
+        xFollowPos = camFollowPos.localPosition.x;
+        ogYPos = camFollowPos.localPosition.y;
+        yFollowPos = ogYPos;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         hipFov = vcam.m_Lens.FieldOfView;
@@ -51,6 +63,8 @@ public class AimStateManager : MonoBehaviour
             aimPos.position = Vector3.Lerp(aimPos.position, hit.point, aimSmoothSpeed * Time.deltaTime);
             actualAimPos = hit.point;
         }
+        
+        MoveCamera();
     }
 
     private void LateUpdate()
@@ -66,8 +80,13 @@ public class AimStateManager : MonoBehaviour
         currentState.EnterState(this);
     }
 
-    private void Shoot()
+    void MoveCamera()
     {
-        // Add your shooting logic here
+        if (Input.GetKeyDown(KeyCode.Mouse2)) xFollowPos = -xFollowPos;
+        if (moving.currentState == moving.Crouch) yFollowPos = crouchCamHeight;
+        else yFollowPos = ogYPos;
+        Vector3 newFollowPosition = new Vector3(xFollowPos, yFollowPos, camFollowPos.localPosition.z);
+        camFollowPos.localPosition = Vector3.Lerp(camFollowPos.localPosition, newFollowPosition,
+            shoulderSwapSpeed * Time.deltaTime);
     }
 }

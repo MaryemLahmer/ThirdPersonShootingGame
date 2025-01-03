@@ -20,10 +20,9 @@ public class IdleState : MovementBaseState
         {
             movement.SwitchState(movement.Crouch);
         }
-
-
-        if (Input.GetKey(KeyCode.Space) && movement.IsGrounded())
+        if (Input.GetKey(KeyCode.Space))
         {
+            movement.previousState = this;
             movement.SwitchState(movement.Jump);
         }
 

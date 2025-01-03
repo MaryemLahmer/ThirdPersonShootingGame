@@ -6,35 +6,21 @@ public class JumpState : MovementBaseState
 {
     public override void EnterState(MovementStateManager movement)
     {
-        movement.StartCoroutine(HandleJumpTransition(movement));
-       
+        if(movement.previousState == movement.Idle) movement.anim.SetTrigger("IdleJump");
+        else if (movement.previousState == movement.Run || movement.previousState == movement.Walk) movement.anim.SetTrigger("RunJump");
 
     }
-
-    private IEnumerator HandleJumpTransition(MovementStateManager movement)
-    {
-        movement.anim.SetBool("Jumping", true);
-        yield return new WaitForSeconds(0.4f);
-        movement.velocity.y = Mathf.Sqrt(movement.jumpForce * -8f * movement.gravity);
-
-    }
-
-
+    
     public override void UpdateState(MovementStateManager movement, AimStateManager aim)
     {
-        if (movement.velocity.y <= 0 && movement.IsGrounded())
+        if (movement.jumped && movement.IsGrounded())
         {
-            
-            ExitState(movement, movement.Idle); 
+            movement.jumped = false;
+            if(movement.hInput == 0 && movement.vInput ==0) movement.SwitchState(movement.Idle);
+            else if (Input.GetKey(KeyCode.LeftShift)) movement.SwitchState(movement.Run);
+            else movement.SwitchState(movement.Walk);
         }
-        else if (Input.GetKey(KeyCode.Space) && movement.IsGrounded())
-        {
-            ExitState(movement, movement.Jump); 
-        }
-        else if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            ExitState(movement, movement.Run);
-        }
+        
     }
 
     void ExitState(MovementStateManager movement, MovementBaseState state)
