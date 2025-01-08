@@ -15,7 +15,7 @@ public class WeaponManager : MonoBehaviour
     [SerializeField] private Transform barrelPos;
     [SerializeField] float bulletVelocity;
     [SerializeField] private int bulletPerShot;
-    public float damage = 20f;
+    public int damage = 20;
     private AimStateManager aim;
     private WeaponBloom bloom;
 
@@ -54,7 +54,7 @@ public class WeaponManager : MonoBehaviour
             recoil = GetComponent<WeaponRecoil>();
             recoil.recoilFollowPos = weaponClass.recoilFollowPos;
         }
-        weaponClass.SetCurrentWeapon( this);
+        weaponClass.SetCurrentWeapon(this);
        
     }
 

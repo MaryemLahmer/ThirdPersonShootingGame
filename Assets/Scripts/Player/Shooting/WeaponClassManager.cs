@@ -6,6 +6,7 @@ using UnityEngine;
 public class WeaponClassManager : MonoBehaviour
 {
     private ActionStateManager actions;
+    private AimStateManager aim;
     public Transform recoilFollowPos;
     public WeaponManager[] weapons;
     private int currentWeaponIndex;
@@ -13,17 +14,22 @@ public class WeaponClassManager : MonoBehaviour
     private void Awake()
     {
         currentWeaponIndex = 0;
-        for (int i = 0; i < weapons.Length; i++)
+        foreach ( var weapon  in weapons)
         {
-            if (i == 0) weapons[i].gameObject.SetActive(true);
-            else weapons[i].gameObject.SetActive(false);
+            weapon.gameObject.SetActive(false);
         }
     }
 
+    public WeaponManager currentWeapon()
+    {
+        return weapons[currentWeaponIndex];
+    }
+    
     public void SetCurrentWeapon(WeaponManager weapon)
     {
         if (actions == null) actions = GetComponent<ActionStateManager>();
         actions.SetWeapon(weapon);
+        weapon.gameObject.SetActive(true);
     }
 
     public void ChangeWeapon(float direction)

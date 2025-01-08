@@ -6,6 +6,7 @@ public class IdleState : MovementBaseState
 {
     public override void EnterState(MovementStateManager movement)
     {
+
     }
 
     public override void UpdateState(MovementStateManager movement, AimStateManager aim)

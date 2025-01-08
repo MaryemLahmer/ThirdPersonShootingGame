@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 using Cinemachine;
-
+using UnityEngine.Animations.Rigging;
 public class AimStateManager : MonoBehaviour
 {
     public AimBaseState currentState;
@@ -17,8 +17,8 @@ public class AimStateManager : MonoBehaviour
     [HideInInspector] public float currentFov;
     public float fovSmoothSpeed = 10f;
     public bool isAiming;
-
-    public Transform aimPos;
+    
+    [HideInInspector] public Transform aimPos;
     [HideInInspector] public Vector3 actualAimPos;
     [SerializeField] private float aimSmoothSpeed = 20f;
     [SerializeField] LayerMask aimMask;
@@ -29,8 +29,9 @@ public class AimStateManager : MonoBehaviour
     [SerializeField] private float shoulderSwapSpeed = 10f;
     private MovementStateManager moving;
 
-
     [SerializeField] Camera mainCamera;
+
+    private WeaponClassManager weapons;
 
     void Start()
     {
@@ -45,6 +46,8 @@ public class AimStateManager : MonoBehaviour
         SwitchState(Hip);
         isAiming = false;
         animator.SetLayerWeight(1, 0);
+        weapons = GetComponent<WeaponClassManager>();
+
     }
 
     void Update()
@@ -55,7 +58,7 @@ public class AimStateManager : MonoBehaviour
         currentState.UpdateState(this);
         vcam.m_Lens.FieldOfView = Mathf.Lerp(vcam.m_Lens.FieldOfView, currentFov, fovSmoothSpeed * Time.deltaTime);
         currentFov = isAiming ? adsFov : hipFov;
-
+        weapons.currentWeapon().gameObject.SetActive(isAiming);
         Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
         Ray ray = mainCamera.ScreenPointToRay(screenCenter);
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, aimMask))
