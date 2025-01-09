@@ -11,15 +11,14 @@ public class WeaponManager : MonoBehaviour
 
     [Header("Bullet Properties")] [SerializeField]
     GameObject bullet;
-
-    [SerializeField] private Transform barrelPos;
+    [SerializeField] private Transform bulletPos;
     [SerializeField] float bulletVelocity;
     [SerializeField] private int bulletPerShot;
     public int damage = 20;
     private AimStateManager aim;
     private WeaponBloom bloom;
 
-
+    
     [SerializeField] private AudioClip gunShot;
     [HideInInspector] public AudioSource audioSource;
     [HideInInspector] public WeaponAmmo ammo;
@@ -79,19 +78,20 @@ public class WeaponManager : MonoBehaviour
     void Fire()
     {
         fireRateTimer = 0;
-        barrelPos.LookAt(aim.aimPos);
-        barrelPos.localEulerAngles = bloom.BloomAngle(barrelPos);
+        bulletPos.LookAt(aim.aimPos);
         audioSource.PlayOneShot(gunShot);
         recoil.TriggerRecoil();
         // TriggerMuzzleFlash(); 
         ammo.currentAmmo--;
         for (int i = 0; i < bulletPerShot; i++)
         {
-            GameObject bulletInstance = Instantiate(bullet, barrelPos.position, barrelPos.rotation);
+            GameObject bulletInstance = Instantiate(bullet, bulletPos.position , bulletPos.rotation);
+            bulletInstance.SetActive(true);
             Bullet bulletScript = bulletInstance.GetComponent<Bullet>();
             bulletScript.weapon = this;
-            Rigidbody rb = bulletInstance.GetComponent<Rigidbody>();
-            rb.AddForce(barrelPos.forward * bulletVelocity, ForceMode.Impulse);
+           Rigidbody rb = bulletInstance.GetComponent<Rigidbody>();
+            rb.AddForce(bulletPos.forward * bulletVelocity, ForceMode.Impulse);
+            
         }
     }
 

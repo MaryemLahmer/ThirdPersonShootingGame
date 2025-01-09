@@ -17,7 +17,6 @@ public class HipFireState : AimBaseState
     {
         if (Input.GetKey(KeyCode.Mouse0))
         {
-            //transition to shooting
             if(aim.isAiming) aim.SwitchState(aim.Aim);
         }
         
