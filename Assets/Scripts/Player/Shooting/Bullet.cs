@@ -1,8 +1,9 @@
 using UnityEngine;
+
 public class Bullet : MonoBehaviour
 {
     [SerializeField] private float timeToDestroy = 15f;
-    [SerializeField] private GameObject explosionEffectPrefab;
+    [SerializeField] private ParticleSystem explosionPrefab;
     private Rigidbody rb;
     [HideInInspector] public WeaponManager weapon;
     [SerializeField] private float speed = 1f;
@@ -12,19 +13,19 @@ public class Bullet : MonoBehaviour
         if (rb == null) rb = GetComponent<Rigidbody>();
         Destroy(this.gameObject, timeToDestroy);
     }
+
     private void FixedUpdate()
     {
         transform.position += transform.forward * (speed * Time.fixedDeltaTime);
     }
+
     private void OnCollisionEnter(Collision other)
     {
-        if (explosionEffectPrefab != null) 
-        {
-            GameObject explosion = Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
-            explosion.gameObject.SetActive(true);
-            //explosion.Play();
-            Destroy(explosion, 2f);
-        }
+        var explosion = Instantiate(explosionPrefab, other.contacts[0].point, Quaternion.identity);
+        explosion.gameObject.SetActive(true);
+        explosion.Play();
+        Destroy(explosion, 2f);
+
 
         if (other.gameObject.GetComponentInParent<EnemyHealth>())
         {
