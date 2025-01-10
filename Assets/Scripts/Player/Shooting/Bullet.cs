@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour
     [SerializeField] private ParticleSystem explosionPrefab;
     private Rigidbody rb;
     [HideInInspector] public WeaponManager weapon;
-    [SerializeField] private float speed = 1f;
+    [SerializeField] private float speed;
 
     void Start()
     {
