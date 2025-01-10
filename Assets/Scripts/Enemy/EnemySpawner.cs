@@ -61,7 +61,6 @@ public class EnemySpawner : MonoBehaviour
         Vector3 randomPos = GetRandomSpawnPosition();
         NavMeshHit hit;
 
-        // Try to find a valid NavMesh position
         if (NavMesh.SamplePosition(randomPos, out hit, 2f, NavMesh.AllAreas))
         {
             Vector3 spawnPos = new Vector3(hit.position.x, spawnHeight, hit.position.z);

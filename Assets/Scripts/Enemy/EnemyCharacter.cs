@@ -11,9 +11,13 @@ public class EnemyCharacter : MonoBehaviour, IDamageable
     [SerializeField] private float shootCooldown = 1f;
     [SerializeField] private float angularSpeed = 360f;
     [SerializeField] private Transform target;
-    [SerializeField] private Bullet bulletPrefab;
+    [SerializeField] private GameObject bulletPrefab;
+    private GameObject _bulletPrefabInstance; // Reference to keep a local copy
+
     [SerializeField] private ParticleSystem explosionPrefab;
-    
+
+    [SerializeField] float bulletVelocity;
+
     // Add boundaries for spawn area
     [SerializeField] private float minX = -12f;
     [SerializeField] private float maxX = 12f;
@@ -29,9 +33,17 @@ public class EnemyCharacter : MonoBehaviour, IDamageable
 
     public float HitPointPercent => (float)_hitPoints / initialHitPoints;
 
+    private void Start()
+    {
+        _bulletPrefabInstance = Instantiate(bulletPrefab);
+        _bulletPrefabInstance.SetActive(true);
+        DontDestroyOnLoad(_bulletPrefabInstance);
+    }
+
     protected void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
+        _shootTimer = shootCooldown; // Start ready to shoot
         _hitPoints = initialHitPoints;
     }
 
@@ -50,7 +62,6 @@ public class EnemyCharacter : MonoBehaviour, IDamageable
             transform.position = hit.position;
             _navMeshAgent.enabled = true;
             StartCoroutine(AIRoutine());
-
         }
         else
         {
@@ -61,27 +72,23 @@ public class EnemyCharacter : MonoBehaviour, IDamageable
 
     private IEnumerator AIRoutine()
     {
-        while (enabled)
+        while (true)
         {
-
             Vector3 randomDestination = GetRandomNavMeshPoint();
             if (_navMeshAgent.isOnNavMesh)
             {
-
                 _navMeshAgent.SetDestination(randomDestination);
 
-                // Wait until path is computed
-                yield return new WaitUntil(() => _navMeshAgent.hasPath );
+                yield return new WaitUntil(() => _navMeshAgent.hasPath);
 
-                if (_navMeshAgent.pathStatus != NavMeshPathStatus.PathInvalid)
+                // if (_navMeshAgent.pathStatus != NavMeshPathStatus.PathInvalid)
                 {
-                    // Combat routine
                     do
                     {
                         _shootTimer += Time.deltaTime;
 
-                        var direction = (target.position - transform.position);
-                        var lookRotation = Quaternion.LookRotation(direction.normalized);
+                        var direction = (target.position - transform.position).normalized;
+                        var lookRotation = Quaternion.LookRotation(direction);
 
                         transform.rotation = Quaternion.RotateTowards(
                             transform.rotation,
@@ -89,23 +96,27 @@ public class EnemyCharacter : MonoBehaviour, IDamageable
                             angularSpeed * Time.deltaTime);
 
                         bool hitWall = Physics.RaycastNonAlloc(
-                            transform.position + Vector3.up, 
-                            direction.normalized, 
-                            _raycastHits, 
+                            transform.position + Vector3.up,
+                            direction,
+                            _raycastHits,
                             direction.magnitude) > 1;
 
-                        if (_shootTimer >= shootCooldown && !hitWall)
+                        if (_shootTimer >= shootCooldown)
                         {
                             _shootTimer = 0f;
-                            Instantiate(bulletPrefab, 
-                                transform.position + direction.normalized * 0.5f, 
-                                lookRotation).gameObject.SetActive(true);
+
+                            Vector3 spawnPos = transform.position + transform.forward * 1.5f;
+
+                            GameObject bulletInstance =
+                                Instantiate(_bulletPrefabInstance, spawnPos, transform.rotation);
+                            bulletInstance.SetActive(true);
+
+                         
                         }
 
                         yield return null;
                         _moveTimer += Time.deltaTime;
-                    } 
-                    while (_moveTimer < moveCooldown);
+                    } while (_moveTimer < moveCooldown);
                 }
             }
 
@@ -115,6 +126,16 @@ public class EnemyCharacter : MonoBehaviour, IDamageable
         }
     }
 
+    /*
+    private void OnDestroy()
+    {
+        // Clean up our template instance when the enemy is destroyed
+        if (_bulletPrefabInstance != null)
+        {
+            Destroy(_bulletPrefabInstance);
+        }
+    }
+*/
     private Vector3 GetRandomNavMeshPoint()
     {
         Vector3 randomPoint;
@@ -130,9 +151,8 @@ public class EnemyCharacter : MonoBehaviour, IDamageable
                 Random.Range(minZ, maxZ)
             );
             attempts++;
-        }
-        while (!NavMesh.SamplePosition(randomPoint, out hit, 5f, NavMesh.AllAreas) 
-               && attempts < maxAttempts);
+        } while (!NavMesh.SamplePosition(randomPoint, out hit, 5f, NavMesh.AllAreas)
+                 && attempts < maxAttempts);
 
         return hit.position;
     }
