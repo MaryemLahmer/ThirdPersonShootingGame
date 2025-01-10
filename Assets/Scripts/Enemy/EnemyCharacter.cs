@@ -13,6 +13,12 @@ public class EnemyCharacter : MonoBehaviour, IDamageable
     [SerializeField] private Transform target;
     [SerializeField] private Bullet bulletPrefab;
     [SerializeField] private ParticleSystem explosionPrefab;
+    
+    // Add boundaries for spawn area
+    [SerializeField] private float minX = -12f;
+    [SerializeField] private float maxX = 12f;
+    [SerializeField] private float minZ = -502f;
+    [SerializeField] private float maxZ = -498f;
 
     private int _hitPoints = 0;
     private float _moveTimer = 0f;
@@ -26,61 +32,109 @@ public class EnemyCharacter : MonoBehaviour, IDamageable
     protected void Awake()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
-
         _hitPoints = initialHitPoints;
     }
 
     protected void OnEnable()
     {
-        StartCoroutine(Coroutine());
-        IEnumerator Coroutine()
+        StartCoroutine(InitializeAIRoutine());
+    }
+
+    private IEnumerator InitializeAIRoutine()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(transform.position, out hit, 5f, NavMesh.AllAreas))
         {
-            yield return null;
+            transform.position = hit.position;
             _navMeshAgent.enabled = true;
+            StartCoroutine(AIRoutine());
 
-            while (enabled)
-            {
-                _navMeshAgent.SetDestination(new Vector3(
-                    Random.Range(-12f, 12f),
-                    0f,
-                    Random.Range(-12f, 12f)));
-
-                do yield return null;
-                while (_navMeshAgent.hasPath);
-
-                do
-                {
-                    _shootTimer += Time.deltaTime;
-
-                    var direction = (target.position - transform.position);
-                    var lookRotation = Quaternion.LookRotation(direction.normalized);
-
-                    transform.rotation = Quaternion.RotateTowards(
-                        transform.rotation,
-                        lookRotation,
-                        angularSpeed * Time.deltaTime);
-
-                    bool hitWall = false;
-
-                    // On peut lancer un raycast et voir si on hit quelque chose sur le chemin entre notre transform et la cible (exclue)
-                    // Sinon on peut lancer un raycast jusqu'à la cible et récupérer les objets touchés. S'il y a plus d'un objet touché, ça veut dire qu'il y a un obstacle au milieu
-                    // hitWall = Physics.Raycast(transform.position + Vector3.up, direction.normalized, direction.magnitude - 0.5f);
-                    hitWall = Physics.RaycastNonAlloc(transform.position + Vector3.up, direction.normalized, _raycastHits, direction.magnitude) > 1;
-
-                    if (_shootTimer >= shootCooldown && !hitWall)
-                    {
-                        _shootTimer = 0f;
-                        Instantiate(bulletPrefab, transform.position + direction.normalized * 0.5f, lookRotation).gameObject.SetActive(true);
-                    }
-
-                    yield return null;
-                    _moveTimer += Time.deltaTime;
-                } while (_moveTimer < moveCooldown);
-
-                _moveTimer = 0f;
-                _shootTimer = 0f;
-            }
         }
+        else
+        {
+            Debug.LogError("Enemy spawned outside of NavMesh!");
+            gameObject.SetActive(false);
+        }
+    }
+
+    private IEnumerator AIRoutine()
+    {
+        while (enabled)
+        {
+
+            Vector3 randomDestination = GetRandomNavMeshPoint();
+            if (_navMeshAgent.isOnNavMesh)
+            {
+
+                _navMeshAgent.SetDestination(randomDestination);
+
+                // Wait until path is computed
+                yield return new WaitUntil(() => _navMeshAgent.hasPath );
+
+                if (_navMeshAgent.pathStatus != NavMeshPathStatus.PathInvalid)
+                {
+                    // Combat routine
+                    do
+                    {
+                        _shootTimer += Time.deltaTime;
+
+                        var direction = (target.position - transform.position);
+                        var lookRotation = Quaternion.LookRotation(direction.normalized);
+
+                        transform.rotation = Quaternion.RotateTowards(
+                            transform.rotation,
+                            lookRotation,
+                            angularSpeed * Time.deltaTime);
+
+                        bool hitWall = Physics.RaycastNonAlloc(
+                            transform.position + Vector3.up, 
+                            direction.normalized, 
+                            _raycastHits, 
+                            direction.magnitude) > 1;
+
+                        if (_shootTimer >= shootCooldown && !hitWall)
+                        {
+                            _shootTimer = 0f;
+                            Instantiate(bulletPrefab, 
+                                transform.position + direction.normalized * 0.5f, 
+                                lookRotation).gameObject.SetActive(true);
+                        }
+
+                        yield return null;
+                        _moveTimer += Time.deltaTime;
+                    } 
+                    while (_moveTimer < moveCooldown);
+                }
+            }
+
+            _moveTimer = 0f;
+            _shootTimer = 0f;
+            yield return null;
+        }
+    }
+
+    private Vector3 GetRandomNavMeshPoint()
+    {
+        Vector3 randomPoint;
+        NavMeshHit hit;
+        int maxAttempts = 30;
+        int attempts = 0;
+
+        do
+        {
+            randomPoint = new Vector3(
+                Random.Range(minX, maxX),
+                71f,
+                Random.Range(minZ, maxZ)
+            );
+            attempts++;
+        }
+        while (!NavMesh.SamplePosition(randomPoint, out hit, 5f, NavMesh.AllAreas) 
+               && attempts < maxAttempts);
+
+        return hit.position;
     }
 
     public void AddDestroyListener(UnityAction<EnemyCharacter> listener)
