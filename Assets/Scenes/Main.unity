@@ -283,9 +283,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0b957c3dbd27564b9fe4655fae0879d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToDestroy: 5
   explosionPrefab: {fileID: 1071545397}
-  speed: 20
+  speed: 40
 --- !u!54 &242447274
 Rigidbody:
   m_ObjectHideFlags: 0
